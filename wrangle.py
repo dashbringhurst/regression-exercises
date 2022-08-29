@@ -60,3 +60,17 @@ def split_data(df, column):
     train, test = train_test_split(df, test_size=.2, random_state=217, stratify=df[column])
     train, validate = train_test_split(train, test_size=.25, random_state=217, stratify=train[column])
     return train, validate, test
+
+def quantile_scaler():
+    '''This function returns scaled dataframes for train, validate, and test using the QuantileTransformer method
+    from sklearn.preprocessing with a normal output distribution.'''
+    scaler = sklearn.preprocessing.QuantileTransformer(output_distribution='normal')
+    # scale the train set and save into a variable as a dataframe
+    X_train = pd.DataFrame(scaler.fit_transform(train))
+    # scale the validate set and save into a variable as a dataframe
+    X_validate = pd.DataFrame(scaler.fit_transform(validate))
+    # scale the test set and save into a variable as a dataframe
+    X_test = pd.DataFrame(scaler.fit_transform(test))
+    # return the three scaled dataframes for data exploration and modeling
+    return X_train, X_validate, X_test
+
