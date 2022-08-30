@@ -48,30 +48,92 @@ def wrangle_zillow():
     # rename columns for readability
     df = df.rename(columns={'bedroomcnt': 'bedrooms', 'bathroomcnt': 'bathrooms', 'calculatedfinishedsquarefeet': 'sqft', 
                         'taxvaluedollarcnt': 'tax_value', 'yearbuilt': 'year', 'taxamount': 'tax_amount'})
+    # remove rows with 0 bedrooms
+    df = df[df['bedrooms'] != 0]
+    # remove rows with 0 bathrooms
+    df = df[df['bathrooms'] != 0]
+    # remove rows with 8 or more bedrooms
+    df = df[df['bedrooms'] < 8]
+    # remove rows with 6 or more bathrooms
+    df = df[df['bathrooms'] < 6]
+    # remove rows with values less than or equal to 700 square feet
+    df = df[df.sqft > 700]
+    # remove rows with values greater than or equal to 10_000 square feet
+    df = df[df.sqft < 10000]
+    # remove rows with tax values greater than or equal to 600000
+    df = df[df.tax_value < 600000]
+    # remove rows with tax values less than or equal to 1000
+    df = df[df.tax_value > 1000]
+    # remove rows with a year less than or equal to 1899
+    df = df[df.year > 1899]
+    # remove rows with a tax amount greater than or equal to 8000
+    df = df[df.tax_amount < 8000]
     return df
 
-def split_data(df, column):
-    '''This function takes in two arguments, a dataframe and a string. The string argument is the name of the
-        column that will be used to stratify the train_test_split. The function returns three dataframes, a 
-        training dataframe with 60 percent of the data, a validate dataframe with 20 percent of the data and test
-        dataframe with 20 percent of the data.'''
+def split_data(df):
+    '''This function takes in a dataframe and returns three dataframes, a training dataframe with 60 percent of the data, 
+        a validate dataframe with 20 percent of the data and test dataframe with 20 percent of the data.'''
     # split the dataset into two, with 80 percent of the observations in train and 20 percent in test
-    train, test = train_test_split(df, test_size=.2, random_state=217, stratify=df[column])
+    train, test = train_test_split(df, test_size=.2, random_state=217)
     # split the train again into two sets, using a 75/25 percent split
-    train, validate = train_test_split(train, test_size=.25, random_state=217, stratify=train[column])
+    train, validate = train_test_split(train, test_size=.25, random_state=217)
     # return three datasets, train (60 percent of total), validate (20 percent of total), and test (20 percent of total)
     return train, validate, test
 
-def quantile_scaler():
-    '''This function returns scaled dataframes for train, validate, and test using the QuantileTransformer method
-    from sklearn.preprocessing with a normal output distribution.'''
+def quantile_scaler_norm():
+    '''This function applies the .QuantileTransformer method from sklearn to previously assigned
+    X_train, X_validate, and X_test variables and returns the scaled versions of each variable.'''
+    # make the scaler
     scaler = sklearn.preprocessing.QuantileTransformer(output_distribution='normal')
-    # scale the train set and save into a variable as a dataframe
-    X_train = pd.DataFrame(scaler.fit_transform(train))
-    # scale the validate set and save into a variable as a dataframe
-    X_validate = pd.DataFrame(scaler.transform(validate))
-    # scale the test set and save into a variable as a dataframe
-    X_test = pd.DataFrame(scaler.transform(test))
-    # return the three scaled dataframes for data exploration and modeling
-    return X_train, X_validate, X_test
+    # fit and transform the X_train variable
+    X_train_quantile = pd.DataFrame(scaler.fit_transform(X_train))
+    # transform the X_validate variable
+    X_validate_quantile = pd.DataFrame(scaler.transform(X_validate))
+    # transform the X_test variable
+    X_test_quantile = pd.DataFrame(scaler.transform(X_test))
+    # return three variables, one for each newly scaled variable
+    return X_train_quantile, X_validate_quantile, X_test_quantile
+
+def standard_scaler():
+    '''This function applies the .StandardScaler method from sklearn to previously assigned
+    X_train, X_validate, and X_test variables and returns the scaled versions of each variable.'''
+    # make the scaler
+    scaler = sklearn.preprocessing.StandardScaler()
+    # fit and transform the X_train data
+    X_train_standard = pd.DataFrame(scaler.transform(X_train))
+    # transform the X_validate data
+    X_validate_standard = pd.DataFrame(scaler.transform(X_validate))
+    # transform the X_test data
+    X_test_standard = pd.DataFrame(scaler.transform(X_test))
+    # return the scaled data for each renamed variable
+    return X_train_standard, X_validate_standard, X_test_standard
+
+def minmax_scaler():
+    '''This function applies the .MinMaxScaler method from sklearn to previously assigned
+    X_train, X_validate, and X_test variables and returns the scaled versions of each variable.'''
+    # make the scaler
+    scaler = sklearn.preprocessing.MinMaxScaler()
+    # fit and transform the X_train data
+    X_train_minmax = pd.DataFrame(scaler.transform(X_train))
+    # transform the X_validate data
+    X_validate_minmax = pd.DataFrame(scaler.transform(X_validate))
+    # transform the X_test data
+    X_test_minmax = pd.DataFrame(scaler.transform(X_test))
+    # return the scaled data for each renamed variable
+    return X_train_minmax, X_validate_minmax, X_test_minmax
+
+def robust_scaler():
+    '''This function applies the .RobustScaler method from sklearn to previously assigned
+    X_train, X_validate, and X_test variables and returns the scaled versions of each variable.'''
+    # make the scaler
+    scaler = sklearn.preprocessing.RobustScaler()
+    # fit and transform the X_train data
+    X_train_robust = pd.DataFrame(scaler.transform(X_train))
+    # transform the X_validate data
+    X_validate_robust = pd.DataFrame(scaler.transform(X_validate))
+    # transform the X_test data
+    X_test_robust = pd.DataFrame(scaler.transform(X_test))
+    # return the scaled data for each renamed variable
+    return X_train_robust, X_validate_robust, X_test_robust
+
 
