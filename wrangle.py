@@ -100,7 +100,7 @@ def standard_scaler():
     # make the scaler
     scaler = sklearn.preprocessing.StandardScaler()
     # fit and transform the X_train data
-    X_train_standard = pd.DataFrame(scaler.transform(X_train))
+    X_train_standard = pd.DataFrame(scaler.fit_transform(X_train))
     # transform the X_validate data
     X_validate_standard = pd.DataFrame(scaler.transform(X_validate))
     # transform the X_test data
@@ -114,7 +114,7 @@ def minmax_scaler():
     # make the scaler
     scaler = sklearn.preprocessing.MinMaxScaler()
     # fit and transform the X_train data
-    X_train_minmax = pd.DataFrame(scaler.transform(X_train))
+    X_train_minmax = pd.DataFrame(scaler.fit_transform(X_train))
     # transform the X_validate data
     X_validate_minmax = pd.DataFrame(scaler.transform(X_validate))
     # transform the X_test data
@@ -128,7 +128,7 @@ def robust_scaler():
     # make the scaler
     scaler = sklearn.preprocessing.RobustScaler()
     # fit and transform the X_train data
-    X_train_robust = pd.DataFrame(scaler.transform(X_train))
+    X_train_robust = pd.DataFrame(scaler.fit_transform(X_train))
     # transform the X_validate data
     X_validate_robust = pd.DataFrame(scaler.transform(X_validate))
     # transform the X_test data
