@@ -4,6 +4,7 @@ import env
 import acquire
 import os
 from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import QuantileTransformer, StandardScaler, MinMaxScaler, RobustScaler
 
 def get_connection(db, user=env.user, host=env.host, password=env.password):
     '''This function uses credentials from an env file to log into a database'''
@@ -11,15 +12,14 @@ def get_connection(db, user=env.user, host=env.host, password=env.password):
 
 def new_zillow_db():
     '''The function uses the get_connection function to connect to a database and retrieve the zillow dataset'''
+    
     return pd.read_sql('''SELECT bedroomcnt, bathroomcnt, calculatedfinishedsquarefeet, taxvaluedollarcnt, 
     yearbuilt, taxamount, fips from properties_2017 LEFT JOIN propertylandusetype USING(propertylandusetypeid)
     WHERE propertylandusedesc IN ("Single Family Residential", "Inferred Single Family Residential");''', get_connection('zillow'))
 
 def get_zillow_data():
-    '''
-    This function reads in telco data from Codeup database, writes data to
-    a csv file if a local file does not exist, and returns a df.
-    '''
+    ''' This function reads in telco data from Codeup database, writes data to
+    a csv file if a local file does not exist, and returns a df.'''
     if os.path.isfile('zillow.csv'):
         # If csv file exists read in data from csv file.
         df = pd.read_csv('zillow.csv', index_col=0)     
@@ -59,7 +59,7 @@ def wrangle_zillow():
     # remove rows with values less than or equal to 700 square feet
     df = df[df.sqft > 700]
     # remove rows with values greater than or equal to 10_000 square feet
-    df = df[df.sqft < 10000]
+    df = df[df.sqft < 6000]
     # remove rows with tax values greater than or equal to 600000
     df = df[df.tax_value < 600000]
     # remove rows with tax values less than or equal to 1000
@@ -84,7 +84,7 @@ def quantile_scaler_norm():
     '''This function applies the .QuantileTransformer method from sklearn to previously assigned
     X_train, X_validate, and X_test variables and returns the scaled versions of each variable.'''
     # make the scaler
-    scaler = sklearn.preprocessing.QuantileTransformer(output_distribution='normal')
+    scaler = QuantileTransformer(output_distribution='normal')
     # fit and transform the X_train variable
     X_train_quantile = pd.DataFrame(scaler.fit_transform(X_train))
     # transform the X_validate variable
@@ -98,7 +98,7 @@ def standard_scaler():
     '''This function applies the .StandardScaler method from sklearn to previously assigned
     X_train, X_validate, and X_test variables and returns the scaled versions of each variable.'''
     # make the scaler
-    scaler = sklearn.preprocessing.StandardScaler()
+    scaler = StandardScaler()
     # fit and transform the X_train data
     X_train_standard = pd.DataFrame(scaler.fit_transform(X_train))
     # transform the X_validate data
@@ -112,7 +112,7 @@ def minmax_scaler():
     '''This function applies the .MinMaxScaler method from sklearn to previously assigned
     X_train, X_validate, and X_test variables and returns the scaled versions of each variable.'''
     # make the scaler
-    scaler = sklearn.preprocessing.MinMaxScaler()
+    scaler = MinMaxScaler()
     # fit and transform the X_train data
     X_train_minmax = pd.DataFrame(scaler.fit_transform(X_train))
     # transform the X_validate data
@@ -126,7 +126,7 @@ def robust_scaler():
     '''This function applies the .RobustScaler method from sklearn to previously assigned
     X_train, X_validate, and X_test variables and returns the scaled versions of each variable.'''
     # make the scaler
-    scaler = sklearn.preprocessing.RobustScaler()
+    scaler = RobustScaler()
     # fit and transform the X_train data
     X_train_robust = pd.DataFrame(scaler.fit_transform(X_train))
     # transform the X_validate data
