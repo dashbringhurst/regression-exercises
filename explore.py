@@ -72,3 +72,31 @@ def plot_categorical_and_continuous_vars(df):
     sns.lineplot(x='year', y='sqft', data=df)
     sns.regplot(x='year', y='sqft', data=df, truncate=False, scatter=False, color='red')
 
+def select_kbest(X, y, k):
+    '''This function takes in three arguments, X (selected features), y (target variable), and k (number of 
+    features to select) and calculates the top features using selectKbest. The function returns a list of the 
+    top features.'''
+    f_selector = SelectKBest(f_regression, k=k)
+    # find the top 2 X's correlated with y
+    f_selector.fit(X, y)
+    # boolean mask of whether the column was selected or not. 
+    feature_mask = f_selector.get_support()
+    # get list of top K features. 
+    f_feature = X.iloc[:,feature_mask].columns.tolist()
+    return f_feature
+
+def rfe(X, y, k):
+    '''This function takes in three arguments, X (selected features), y (target variable), and k (number of 
+    features to select) and calculates the top features using recursive feature elimination. The function
+    returns a list of the top features.'''
+    # initialize the ML algorithm
+    lm = LinearRegression()
+    # create the rfe object, indicating the ML object (lm) and the number of features I want to end up with. 
+    rfe = RFE(lm, n_features_to_select=k)
+    # fit the data using RFE
+    rfe.fit(X,y)  
+    # get the mask of the columns selected
+    feature_mask = rfe.support_
+    # get list of the column names. 
+    rfe_feature = X.iloc[:,feature_mask].columns.tolist()
+    return rfe_feature
