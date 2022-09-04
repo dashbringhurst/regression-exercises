@@ -62,6 +62,8 @@ def better_than_baseline(y, yhat):
     print(f'Model RMSE is better than RMSE baseline: {RMSE < RMSE_baseline}')
 
 def plot_residuals(y, yhat):
+    '''This function takes in two arguments, y (target variable) and yhat (model predictions) and returns a scatterplot
+    of the residuals for the target variable.'''
     residuals = y - yhat
     plt.scatterplot(x=y, y=residuals)
     plt.xlabel('Home Value')
