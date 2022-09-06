@@ -80,59 +80,59 @@ def split_data(df):
     # return three datasets, train (60 percent of total), validate (20 percent of total), and test (20 percent of total)
     return train, validate, test
 
-def quantile_scaler_norm():
+def quantile_scaler_norm(a,b,c):
     '''This function applies the .QuantileTransformer method from sklearn to previously assigned
     X_train, X_validate, and X_test variables and returns the scaled versions of each variable.'''
     # make the scaler
     scaler = QuantileTransformer(output_distribution='normal')
     # fit and transform the X_train variable
-    X_train_quantile = pd.DataFrame(scaler.fit_transform(X_train))
+    X_train_quantile = pd.DataFrame(scaler.fit_transform(a))
     # transform the X_validate variable
-    X_validate_quantile = pd.DataFrame(scaler.transform(X_validate))
+    X_validate_quantile = pd.DataFrame(scaler.transform(b))
     # transform the X_test variable
-    X_test_quantile = pd.DataFrame(scaler.transform(X_test))
+    X_test_quantile = pd.DataFrame(scaler.transform(c))
     # return three variables, one for each newly scaled variable
     return X_train_quantile, X_validate_quantile, X_test_quantile
 
-def standard_scaler():
-    '''This function applies the .StandardScaler method from sklearn to previously assigned
-    X_train, X_validate, and X_test variables and returns the scaled versions of each variable.'''
+def standard_scaler(a,b,c):
+    '''This function applies the .StandardScaler method from sklearn to three arguments, a, b, and c, 
+    and returns the scaled versions of each variable.'''
     # make the scaler
     scaler = StandardScaler()
     # fit and transform the X_train data
-    X_train_standard = pd.DataFrame(scaler.fit_transform(X_train))
+    X_train_standard = pd.DataFrame(scaler.fit_transform(a))
     # transform the X_validate data
-    X_validate_standard = pd.DataFrame(scaler.transform(X_validate))
+    X_validate_standard = pd.DataFrame(scaler.transform(b))
     # transform the X_test data
-    X_test_standard = pd.DataFrame(scaler.transform(X_test))
+    X_test_standard = pd.DataFrame(scaler.transform(c))
     # return the scaled data for each renamed variable
     return X_train_standard, X_validate_standard, X_test_standard
 
-def minmax_scaler():
-    '''This function applies the .MinMaxScaler method from sklearn to previously assigned
-    X_train, X_validate, and X_test variables and returns the scaled versions of each variable.'''
+def minmax_scaler(a,b,c):
+    '''This function applies the .MinMaxScaler method from sklearn to three arguments, a, b, and c,
+    and returns the scaled versions of each variable.'''
     # make the scaler
     scaler = MinMaxScaler()
     # fit and transform the X_train data
-    X_train_minmax = pd.DataFrame(scaler.fit_transform(X_train))
+    X_train_scaled = pd.DataFrame(scaler.fit_transform(a))
     # transform the X_validate data
-    X_validate_minmax = pd.DataFrame(scaler.transform(X_validate))
+    X_validate_scaled = pd.DataFrame(scaler.transform(b))
     # transform the X_test data
-    X_test_minmax = pd.DataFrame(scaler.transform(X_test))
+    X_test_scaled = pd.DataFrame(scaler.transform(c))
     # return the scaled data for each renamed variable
-    return X_train_minmax, X_validate_minmax, X_test_minmax
+    return X_train_scaled, X_validate_scaled, X_test_scaled
 
-def robust_scaler():
-    '''This function applies the .RobustScaler method from sklearn to previously assigned
-    X_train, X_validate, and X_test variables and returns the scaled versions of each variable.'''
+def robust_scaler(a,b,c):
+    '''This function applies the .RobustScaler method from sklearn to three arguments, a, b, and c,
+    and returns the scaled versions of each variable.'''
     # make the scaler
     scaler = RobustScaler()
     # fit and transform the X_train data
-    X_train_robust = pd.DataFrame(scaler.fit_transform(X_train))
+    X_train_robust = pd.DataFrame(scaler.fit_transform(a))
     # transform the X_validate data
-    X_validate_robust = pd.DataFrame(scaler.transform(X_validate))
+    X_validate_robust = pd.DataFrame(scaler.transform(b))
     # transform the X_test data
-    X_test_robust = pd.DataFrame(scaler.transform(X_test))
+    X_test_robust = pd.DataFrame(scaler.transform(c))
     # return the scaled data for each renamed variable
     return X_train_robust, X_validate_robust, X_test_robust
 
